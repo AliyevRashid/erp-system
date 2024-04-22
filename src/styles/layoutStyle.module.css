@@ -1,0 +1,8 @@
+.Container{
+    display: flex;
+    height: 100rem;
+}
+
+.Layout{
+    width:260
+}

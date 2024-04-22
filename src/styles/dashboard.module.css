@@ -1,0 +1,47 @@
+.TotalInfoContainer{
+    display:flex;
+    justify-content: space-around;
+}
+
+
+
+.mainContainer{
+    display: flex;
+    margin:48px 10rem;
+    width: 50%;
+    height: 30%;
+    padding:24px;
+}
+
+.MemoContainer,.StaffListContainer,.PaymentVouchersContainer{
+    margin:96px;
+    width: 100%;
+}
+.MemoList,.StaffList,.PaymentVouchersList{
+    overflow-y: scroll;
+    max-height: 300px;
+    margin:24px;
+    width: 100%;
+    gap:40px;
+    scrollbar-color:aqua;
+}
+
+.tableData{
+    margin: 24px;
+    padding: 36px;
+}
+.MemoList::-webkit-scrollbar,
+.StaffList::-webkit-scrollbar,
+.PaymentVouchersList::-webkit-scrollbar {
+    border-radius: 10px;
+    width: 10px;
+    height: 5px;
+}
+
+.MemoList::-webkit-scrollbar-thumb,
+.StaffList::-webkit-scrollbar-thumb,
+.PaymentVouchersList::-webkit-scrollbar-thumb {
+  background-color: #14ADD6; /* Цвет кнопки прокрутки */
+  border-radius: 10px;
+}
+

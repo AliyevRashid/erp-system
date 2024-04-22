@@ -1,0 +1,23 @@
+.TotalInfoElement{
+    margin:5px 96px;
+    padding:12px;
+    display: flex;
+}
+
+.TotalInfoElementDescription{
+
+    margin:5px
+}
+
+.TotalInfoElementImgContainer{
+      width: 50px;
+      height: 50px;
+      padding:5px;
+      margin:5px 10px;
+}
+
+.TotalInfoElementImg{
+    width:100%;
+    height: 100%;
+    object-fit: cover;
+}
