@@ -1,12 +1,10 @@
-"use client"
+'use client'
 import { useState } from "react";
 import Link from "next/link";
 import styles from "../styles/page.module.css";
-import { useRouter } from "next/navigation";
-import { users } from "../lib/data";
 
 export default function Home() {
-  const router = useRouter();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,16 +16,31 @@ export default function Home() {
     setPassword(e.target.value);
   };
 
-  const handleSignIn = () => {
-    // Здесь можно выполнить проверку email и password, например, сравнив с данными из users
+  const handleSignIn = async () => {
     console.log("Email:", email);
     console.log("Password:", password);
-    const user = users.find(u=> u.email==email && u.password==password)
-    if(user!=undefined){
-      console.log(user);
-    router.push(`/${user.id}/dashboard`);
+
+    try {
+      const response = await fetch('/api/signIn', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('User:', data.user);
+        // Перенаправление на страницу приборной панели
+        // router.push(`/${data.user.id}/dashboard`);
+      } else {
+        console.error('Error signing in:', response.statusText);
+        // Обработка ошибки
+      }
+    } catch (error) {
+      console.error('Error signing in:', error);
+    }
   }
-  };
 
   return (
     <div className={styles.container}>
