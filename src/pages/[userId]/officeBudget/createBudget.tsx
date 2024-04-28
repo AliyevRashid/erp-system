@@ -1,9 +1,11 @@
+'use client'
 import React, { useState } from 'react';
 import style from "../../../styles/createBudget.module.css";
 import Layout from "../../../app/components/Layout";
-import { getBudgetHistory,updateBudgetHistory } from "../../../lib/data";
+import {useRouter} from "next/navigation"
 
 export default function CreateBudget() {
+    const router = useRouter();
     const [budgetData, setBudgetData] = useState({
         budgetNo: "",
         budgetDescription: "",
@@ -20,9 +22,9 @@ export default function CreateBudget() {
         }));
     };
 
-    const handleCreateBudget = () => {
+    const  handleCreateBudget = async () => {
         const newBudget = {
-            id: getBudgetHistory().length + 1, // Генерируем новый ID
+            // Генерируем новый ID
             budgetNo: budgetData.budgetNo,
             budgetDescription: budgetData.budgetDescription,
             budgettedAmount: parseFloat(budgetData.budgettedAmount),
@@ -32,14 +34,20 @@ export default function CreateBudget() {
             isPositive: false, // Пока что оставляем отрицательным
         };
         
-        console.log("New budget:", newBudget);
-        // Здесь вы можете выполнить любую логику для сохранения бюджета
-        let updatedBudgetHistory =getBudgetHistory(); // Создаем копию массива
-        console.log(updatedBudgetHistory);
-        updatedBudgetHistory.push(newBudget);
-        updateBudgetHistory(updatedBudgetHistory);
-        console.log(getBudgetHistory());
-        // Очищаем поля ввода после создания бюджета
+        const response = await fetch('/api/createBudget', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newBudget),
+          });
+          if(response.ok)
+          {
+            console.log("new budget added!");
+          }
+          else{
+             router.push('/1/officeBudget');
+          }
         setBudgetData({
             budgetNo: "",
             budgetDescription: "",
@@ -50,7 +58,7 @@ export default function CreateBudget() {
     };
 
     return (
-        <Layout>
+        <Layout userId={1}>
             <div>
                 <div className={style.headerContainer}>
                     <div className={style.imgContainer}>

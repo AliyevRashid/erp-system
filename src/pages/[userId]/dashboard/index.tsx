@@ -2,6 +2,7 @@
 import TotalInfo from "../../../app/components/TotalInfo";
 import Layout from "../../../app/components/Layout"
 import style from "../../../styles/dashboard.module.css"
+import {usePathname} from "next/navigation";
 import {memoList,staffList,paymentVouchers} from "@/lib/data"
 
 export default function DashBoard(){
@@ -9,8 +10,23 @@ export default function DashBoard(){
     const approved = countByStatus("Approved");
     const rejected = countByStatus("Rejected");
     const pending = countByStatus("Pending");
+    const pathName = usePathname()?.toString();
+    console.log(pathName);
+    let userId= 0;
+    if(pathName)
+    {
+        const parts = pathName?.split('/');
+        const userIdString=parts.find(part => !isNaN(Number(part)));
+        if(userIdString)
+        {
+            userId=parseInt(userIdString);
+        }
+    }
+    
+    // Find the part containing the number
     return(
-        <Layout>
+        <Layout userId={userId}>
+            <div className={style.main}>
             <div><h3>Welcome Name Surname</h3></div>
             <div className={style.TotalInfoContainer}>
                
@@ -23,7 +39,7 @@ export default function DashBoard(){
                 <div className={style.MemoContainer}>
                     <h3>Memo</h3>
                     <div className={style.MemoList}>
-                        <table>
+                        <table className={style.table}>
                             <thead>
                                 <tr>
                                     <th className={style.tableData}><h4>S/N</h4></th>
@@ -50,7 +66,7 @@ export default function DashBoard(){
                 <div className={style.StaffListContainer}>
                     <h3>Staff List</h3>
                     <div className={style.StaffList}>
-                        <table>
+                        <table className={style.table}>
                             <thead>
                                 <tr>
                                     <th className={style.tableData}>S/N</th>
@@ -77,7 +93,7 @@ export default function DashBoard(){
                 <div className={style.PaymentVouchersContainer}>
                     <h3>Payment Vouchers</h3>
                     <div className={style.PaymentVouchersList}>
-                    <table>
+                    <table className={style.table}>
                             <thead>
                                 <tr>
                                     <th className={style.tableData}>S/N</th>
@@ -99,7 +115,7 @@ export default function DashBoard(){
                         </table>
                     </div>
                 </div>
-                <div>
+                <div style={{margin:'76px',padding:'14px'}}>
                     <h3>Staff Application Card</h3>
                     <div style={{display:"flex"}}>
                         <div style={{width:'10px',background:'green',margin:'5px',borderRadius:'10px'}}></div>
@@ -116,6 +132,7 @@ export default function DashBoard(){
                    
                 </div>
             </div>
+        </div>
         </Layout>
     )
 }

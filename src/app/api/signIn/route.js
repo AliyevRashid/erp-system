@@ -1,24 +1,29 @@
-import { connectToDatabase } from "../../database/database";
+import { connectToDatabase} from "../../../../database/database";
 import { NextResponse } from 'next/server';
 
-export default async function post(req, res) {
-  if (req.method === 'POST') {
-    const { email, password } = req.body;
-    try {
-      const db = await connectToDatabase();
-      const collection = db.collection('users');
-      const user = await collection.findOne({ email, password });
 
-      if (user) {
-        return NextResponse.json({ user });
-      } else {
-        return NextResponse.json({ message: 'User not found' });
-      }
-    } catch (error) {
-      console.error('Error signing in:', error);
-      return NextResponse.json({ message: 'Internal server error' });
+export async function POST(req,res){
+  console.log("Hello from Api");
+  const data = await req.json();
+  console.log(data);
+  const { userEmail, userPassword } = data;
+  try {
+    console.log(userEmail+' '+userPassword);
+    const db = await connectToDatabase();
+    const collection = db.collection('users');
+    const users = await collection.find().toArray();
+    console.log(users);
+    const user = await collection.findOne({ email:userEmail, password:userPassword });
+
+    if (user) {
+      return NextResponse.json({ user });
+    } else {
+      console.clear()
+      return NextResponse.json({ message: 'User not found' });
     }
-  } else {
-    return NextResponse.json({ message: 'Method not allowed' });
+  } catch (error) {
+    console.error('Error signing in:', error);
+    return NextResponse.json({ message: 'Internal server error' });
   }
+
 }

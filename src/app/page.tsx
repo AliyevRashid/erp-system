@@ -1,10 +1,10 @@
 'use client'
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // Импортируем useRouter из next/router
 import styles from "../styles/page.module.css";
 
 export default function Home() {
-  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,27 +12,32 @@ export default function Home() {
     setEmail(e.target.value);
   };
 
+  const router = useRouter(); // Получаем экземпляр маршрутизатора с помощью useRouter
   const handlePasswordChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
   const handleSignIn = async () => {
+
     console.log("Email:", email);
     console.log("Password:", password);
-
+    const postData = {
+      userEmail: email,
+      userPassword: password
+    };
     try {
       const response = await fetch('/api/signIn', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(postData),
       });
       if (response.ok) {
         const data = await response.json();
-        console.log('User:', data.user);
-        // Перенаправление на страницу приборной панели
-        // router.push(`/${data.user.id}/dashboard`);
+        console.log('User:', data);
+        // Перенаправляем на страницу приборной панели
+        router.push(`/${data.user.id}/dashboard`); // Используем router.push для навигации
       } else {
         console.error('Error signing in:', response.statusText);
         // Обработка ошибки
@@ -40,7 +45,7 @@ export default function Home() {
     } catch (error) {
       console.error('Error signing in:', error);
     }
-  }
+  };
 
   return (
     <div className={styles.container}>

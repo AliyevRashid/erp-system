@@ -1,0 +1,42 @@
+.totalInfoContainer{
+
+    width: 80%;
+    padding:5px;
+    display: flex;
+    flex-wrap:wrap;
+}
+.buttonsContainer{
+    margin:12px 24px;
+}
+.button{
+    margin:24px 48px;
+    padding:12px;
+    border-color: white;
+    font-size: 14px;
+    color: #515151;
+    border-radius: 16px;
+    font-family: 'Nunito', sans-serif;
+
+
+}
+
+.tableContainer{
+    margin:12px;
+    padding:12px;
+}
+.table{
+    margin: 48px;
+    padding: 24px;
+    flex: 1;
+    font-family: 'Nunito', sans-serif;
+    width: 100rem;
+    border-collapse: separate; /* Разделяем границы ячеек */
+    border-spacing: 48px; /* Устанавливаем отступы между ячейками */
+}
+.table th,.table td {
+  margin:20%;
+  padding:4px;
+  font-family: 'Nunito', sans-serif;
+  text-align: center;
+  font-weight: 400;
+}

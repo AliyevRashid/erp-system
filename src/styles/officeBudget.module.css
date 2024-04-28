@@ -5,7 +5,16 @@
     margin:24px;
     padding:24px;
 }
+.table{
+    width: 100rem;
+    margin: 12px;
+    padding: 0px 12px;
+    flex: 1;
+    font-family: 'Nunito', sans-serif;
 
+    border-collapse: separate; /* Разделяем границы ячеек */
+    border-spacing: 48px; /* Устанавливаем отступы между ячейками */
+}
 .CreateBudgetButton{
     width: 350px;
     border:1px solid #384295;

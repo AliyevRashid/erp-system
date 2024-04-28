@@ -1,20 +1,24 @@
-"use client"
 import TotalInfo from "../../../app/components/TotalInfo"
 import Layout from "../../../app/components/Layout"
 import Styles from "../../../styles/dashboard.module.css"
 import styles from "../../../styles/officeBudget.module.css"
 import {getBudgetHistory} from "../../../lib/data"
-import { useRouter } from "next/navigation"
+import {getAllBudgetHistory} from "../../../../database/database"
+import { useRouter } from "next/router"
+import { GetServerSideProps } from 'next';
 
 
 
+interface OfficeBudgetProps {
+  userId: number;
+  budgetHistory: any[];
+}
 
-
-export default function OfficeBudget(){
+export default function OfficeBudget({ userId, budgetHistory}: OfficeBudgetProps){
     const router = useRouter()
-    const budgetHistory=getBudgetHistory();
     return(
-       <Layout>
+      <div style={{margin:'10px 60px 50px 0px'}}>
+       <Layout userId={userId}>
           {/* header */}
           <div>
             <h2>Office Budget</h2>
@@ -32,33 +36,51 @@ export default function OfficeBudget(){
             </div>
             <h3 style={{margin:'24px',padding:'24px'}}>Budget History</h3>
             <div style={{margin:'12px 48px',padding:"24px",overflowY:'scroll',maxHeight:'700px'}}>
-               <table>
+               <table className={styles.table}>
                   <thead>
                       <tr>
-                          <th className={Styles.tableData}><h4>S/N</h4></th>
-                          <th className={Styles.tableData}><h4>Budget No</h4></th>
-                          <th className={Styles.tableData}><h4>Budget Description</h4></th>
-                          <th className={Styles.tableData}><h4>Budgetted Amount</h4></th>
-                          <th className={Styles.tableData}><h4>Actual Amount</h4></th>
-                          <th className={Styles.tableData}><h4>Variance</h4></th>
-                          <th className={Styles.tableData}><h4>Date</h4></th>
+                          <th ><h4>S/N</h4></th>
+                          <th ><h4>Budget No</h4></th>
+                          <th ><h4>Budget Description</h4></th>
+                          <th ><h4>Budgetted Amount</h4></th>
+                          <th ><h4>Actual Amount</h4></th>
+                          <th ><h4>Variance</h4></th>
+                          <th ><h4>Date</h4></th>
                       </tr>
                   </thead>
                   <tbody>
                    {budgetHistory.map((budget)=>(
                        <tr key={budget.id}>
-                       <td className={Styles.tableData}>{budget.id}</td>
-                       <td className={Styles.tableData}>{budget.budgetNo}</td>
-                       <td className={Styles.tableData}>{budget.budgetDescription}</td>
-                       <td className={Styles.tableData}>{budget.budgettedAmount}</td>
-                       <td className={Styles.tableData}>{budget.actualAmount}</td>
-                       <td className={Styles.tableData} style={{color:budget.isPositive?'green':'red'}}>{budget.variance}</td>
-                       <td className={Styles.tableData}>{budget.date}</td>
+                       <td>{budget.id}</td>
+                       <td>{budget.budgetNo}</td>
+                       <td>{budget.budgetDescription}</td>
+                       <td>{budget.budgettedAmount}</td>
+                       <td>{budget.actualAmount}</td>
+                       <td style={{color:budget.isPositive?'green':'red'}}>{budget.variance}</td>
+                       <td>{budget.date}</td>
                      </tr>
                    ))}
                   </tbody>
                 </table>
             </div> 
         </Layout>
+        </div>
     )
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { userId: userIdString }: { userId?: string } = context.params || {}; // Explicitly specify the type of userIdString
+
+  const userId = userIdString ? parseInt(userIdString, 10) : undefined;
+
+  // Insert initial budget history into the database
+  // Retrieve all budget history from the database
+  const budgetHistory = await getAllBudgetHistory();
+
+  return {
+    props: {
+      userId,
+      budgetHistory: JSON.parse(JSON.stringify(budgetHistory)) // Convert MongoDB documents to JSON
+    }
+  };
+};
