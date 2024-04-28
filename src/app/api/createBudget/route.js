@@ -22,7 +22,6 @@ export async function POST(req,res){
     
     const db = await connectToDatabase();
     const collection = db.collection('budget_history');
-    await collection.deleteMany({}); //delete collection
     await collection.insertOne(newBudget); // Insert the budget data into MongoDB
     return NextResponse.json({ message: 'Budget created successfully' });
 } catch (error) {
